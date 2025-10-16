@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://Network/Nodes/Node/node.gd" id="1_wkiv6"]
+[ext_resource type="Script" path="res://Network/Nodes/Node/Sprite.gd" id="2_o5twy"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rbjo7"]
+radius = 15.0
+
+[node name="Node" type="RigidBody2D"]
+disable_mode = 1
+input_pickable = true
+mass = 0.1
+gravity_scale = 0.0
+linear_damp = 1.0
+script = ExtResource("1_wkiv6")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_rbjo7")
+
+[node name="Sprite" type="Node2D" parent="."]
+script = ExtResource("2_o5twy")

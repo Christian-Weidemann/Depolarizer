@@ -1,0 +1,4 @@
+HEX
+Blue: 4266C2
+Red: D33131
+Grey: BEBEBE

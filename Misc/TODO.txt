@@ -1,0 +1,20 @@
+
+
+Build Main scene with Network, UI, Sounds and a GraphSettings resource.
+
+------------     TODO      --------------
+
+
+Create GraphNode.tscn with visual and collision; implement basic spawn and delete from Main.
+
+Implement GraphNode signals and basic dragging using _physics_process and mode switching.
+
+Implement Edge as a scene that listens to node moved signals and updates Line2D.
+
+Wire selection and connecting mode in Main: click node to select, click another to create edge.
+
+Add deletion logic: deleting node frees connected edges (edges detect missing endpoints).
+
+Polish visuals (GraphNodeVisual reads GraphSettings; Main passes the resource at spawn).
+
+Add saving/loading, performance optimizations (object pools, edge batching) if needed.

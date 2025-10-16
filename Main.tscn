@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://djt4gaml7sopj"]
+
+[ext_resource type="Script" path="res://Main.gd" id="1_4n8ri"]
+[ext_resource type="Script" path="res://Network/network.gd" id="2_d2ccn"]
+[ext_resource type="Script" path="res://Assets/Background.gd" id="2_urmgn"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_4n8ri")
+
+[node name="Background" type="CanvasLayer" parent="."]
+script = ExtResource("2_urmgn")
+
+[node name="Network" type="Node2D" parent="."]
+script = ExtResource("2_d2ccn")
