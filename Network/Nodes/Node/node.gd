@@ -1,10 +1,9 @@
-class_name Node extends RigidBody2D
+extends RigidBody2D
 
 signal moved(new_global_position: Vector2)
 signal about_to_be_deleted()
 
 var visual_settings: Resource = null
-#@onready var visual_settings := preload("res://settings/visual_settings.tres")
 var _last_global_position: Vector2 = Vector2.INF
 
 func _ready():
@@ -36,18 +35,13 @@ func _input_event(viewport, event, shape_idx):
 
 func _deferred_set_spawn_pos(p: Vector2) -> void:
 	global_position = p
-	#set_sleeping(true)
 	$Sprite.queue_redraw()
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 	
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
 		emit_signal("about_to_be_deleted")
 	
-func _physics_process(_delta: float):
+func _physics_process(_delta) -> void:
 	# emit moved only if position actually changed
 	var gp := global_position
 	if gp != _last_global_position:

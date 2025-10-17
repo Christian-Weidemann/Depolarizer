@@ -4,15 +4,15 @@
 [ext_resource type="Script" path="res://Network/network.gd" id="1_gygrk"]
 
 [node name="Network" type="Node2D"]
-position = Vector2(0, -1.16415e-09)
+top_level = true
+visibility_layer = 2
+z_index = 1
 script = ExtResource("1_gygrk")
 
 [node name="Nodes" type="Node2D" parent="."]
-z_index = 2
+z_index = 1
 
 [node name="Edges" type="Node2D" parent="."]
-visibility_layer = 4
-z_index = 1
 
 [node name="LayoutController" type="Node2D" parent="."]
 script = ExtResource("1_beesg")

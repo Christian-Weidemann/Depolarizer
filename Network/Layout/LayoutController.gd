@@ -4,35 +4,25 @@ extends Node2D
 @export var repulsion_strength: float = 3000000.0   # bigger = stronger push
 @export var repulsion_distance: float = 300.0    # distance at which repulsion falls off
 @export var attraction_strength: float = 500.0     # pull toward center
-@export var center: Vector2 = Vector2.ZERO       # world center for attraction
+@onready var attraction_center: Vector2 = get_viewport().get_visible_rect().size * 0.5       # world center for attraction
 @export var max_impulse: float = 200.0
 @export var max_speed: float = 600.0
-@export var jitter_strength: float = 60.0        # initial random kick
+@export var jitter_strength: float = 100.0        # initial random kick
+
+@onready var nodes = $/root/Network/Nodes
+@onready var edges = $/root/Network/Edges
+
 
 var _initialized := false
 
 func _ready() -> void:
-	# set center to viewport center if left default
-	if center == Vector2.ZERO:
-		center = get_viewport().get_visible_rect().size * 0.5
-	# optionally give a small random impulse to break symmetry
-	_give_initial_jitter()
-	_initialized = true
 
-func _give_initial_jitter() -> void:
-	var nodes := get_node_or_null("Network/Nodes")
-	if not nodes:
-		return
-	for n in nodes.get_children():
-		if n is RigidBody2D:
-			var kick := Vector2(randf_range(-1,1), randf_range(-1,1)).normalized() * randf() * jitter_strength
-			n.apply_central_impulse(kick)
+	_initialized = true
 
 func _physics_process(delta: float) -> void:
 	if not enabled:
 		return
-	var nodes := get_node_or_null("/root/Main/Network/Nodes")  # replace with actual path if needed
-	
+		
 	if not nodes:
 		print("No nodes found")
 		return
@@ -66,7 +56,7 @@ func _physics_process(delta: float) -> void:
 			force += _repel_from(positions[i], positions[j])
 
 		# Attraction to center (weak spring)
-		var to_center : Vector2 = center - positions[i]
+		var to_center : Vector2 = attraction_center - positions[i]
 		force += to_center * (attraction_strength / max(1.0, to_center.length()))
 
 		# Clamp impulse and apply to body
@@ -109,3 +99,17 @@ func _repel_from(a: Vector2, b: Vector2) -> Vector2:
 
 func randf_range(minv: float, maxv: float) -> float:
 	return lerp(minv, maxv, randf())
+
+
+
+
+
+
+
+
+
+
+
+
+
+

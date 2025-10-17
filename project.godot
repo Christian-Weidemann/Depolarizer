@@ -22,10 +22,6 @@ boot_splash/minimum_display_time=800
 
 Global="*res://global.gd"
 
-[debug]
-
-settings/stdout/print_fps=true
-
 [display]
 
 window/size/viewport_width=910
@@ -46,6 +42,11 @@ node_color_2=Color(0.258824, 0.4, 0.760784, 1)
 2d/default_gravity_vector=Vector2(0, 0)
 2d/default_linear_damp=8.0
 2d/default_angular_damp=8.0
+
+[rendering]
+
+anti_aliasing/quality/msaa_2d=1
+anti_aliasing/quality/use_taa=true
 
 [shader_globals]
 

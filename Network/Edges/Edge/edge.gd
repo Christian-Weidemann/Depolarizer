@@ -10,6 +10,9 @@ var visual_settings: Resource = null
 var color: Color = Color(1, 1, 1)
 
 func _ready() -> void:
+	
+	# Start invisible
+	visible = false
 
 	# try resolve NodePaths if exported from editor; if created at runtime, Main will assign refs via set_endpoints
 	if endpoint_a != NodePath(""):
@@ -26,7 +29,7 @@ func _ready() -> void:
 		_b_ref.connect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
 
 	# Set visual settings
-	global_scale = Vector2.ONE
+	#global_scale = Vector2.ONE
 	set_width(visual_settings.edge_width)
 	set_default_color(visual_settings.edge_color)
 	set_antialiased(true)
@@ -53,16 +56,13 @@ func _on_endpoint_deleted() -> void:
 func _update_points() -> void:
 	if _a_ref and _b_ref:
 		# use global positions so edge draws correctly regardless of parent transforms
-		var a_pos : Vector2 = _a_ref.global_position
-		var b_pos : Vector2 = _b_ref.global_position
+		var a_pos : Vector2 = _a_ref.position  # .global_position
+		var b_pos : Vector2 = _b_ref.position  # .global_position
 		
 		# convert world points into this Line2D's local space
 		var local_a := to_local(a_pos)
 		var local_b := to_local(b_pos)
 		set_points([local_a, local_b])
-		visible = true
-	else:
-		visible = false
 
 func _disconnect_all() -> void:
 	if _a_ref:
