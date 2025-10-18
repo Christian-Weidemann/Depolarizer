@@ -1,4 +1,5 @@
 extends Line2D
+class_name NetworkEdge
 
 @export var endpoint_a: NodePath
 @export var endpoint_b: NodePath
@@ -10,7 +11,7 @@ var visual_settings: Resource = null
 var color: Color = Color(1, 1, 1)
 
 func _ready() -> void:
-	
+
 	# Start invisible
 	visible = false
 
@@ -29,11 +30,10 @@ func _ready() -> void:
 		_b_ref.connect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
 
 	# Set visual settings
-	#global_scale = Vector2.ONE
 	set_width(visual_settings.edge_width)
 	set_default_color(visual_settings.edge_color)
-	#set_antialiased(true)
 	_update_points()
+	visible = true
 
 func set_endpoints(node_a: Node, node_b: Node) -> void:
 	_disconnect_all()
@@ -56,8 +56,8 @@ func _on_endpoint_deleted() -> void:
 func _update_points() -> void:
 	if _a_ref and _b_ref:
 		# use global positions so edge draws correctly regardless of parent transforms
-		var a_pos : Vector2 = _a_ref.position  # .global_position
-		var b_pos : Vector2 = _b_ref.position  # .global_position
+		var a_pos : Vector2 = _a_ref.position.global_position
+		var b_pos : Vector2 = _b_ref.position.global_position
 		
 		# convert world points into this Line2D's local space
 		var local_a := to_local(a_pos)

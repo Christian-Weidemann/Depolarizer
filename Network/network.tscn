@@ -16,3 +16,5 @@ z_index = 1
 
 [node name="LayoutController" type="Node2D" parent="."]
 script = ExtResource("1_beesg")
+repulsion_strength = 300000.0
+attraction_strength = 100.0

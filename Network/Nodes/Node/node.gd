@@ -1,4 +1,5 @@
 extends RigidBody2D
+class_name NetworkNode
 
 signal moved(new_global_position: Vector2)
 signal about_to_be_deleted()

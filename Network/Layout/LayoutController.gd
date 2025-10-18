@@ -13,7 +13,6 @@ extends Node2D
 @onready var edges := $"../Edges"
 
 
-
 var _initialized := false
 
 func _ready() -> void:
@@ -31,14 +30,9 @@ func _physics_process(delta: float) -> void:
 		print("No nodes found")
 		return
 
-	var bodies := []
-	for n in nodes.get_children():
-		if n is RigidBody2D:
-			bodies.append(n)
+	var bodies := nodes.get_children()
 
 	var count := bodies.size()
-	#if count <= 1:
-	#	return
 
 	# precompute positions
 	var positions := []
@@ -47,7 +41,7 @@ func _physics_process(delta: float) -> void:
 
 	# For each body compute combined force from neighbors
 	for i in range(count):
-		var bi : RigidBody2D = bodies[i]
+		var bi : NetworkNode = bodies[i]
 		if not bi:
 			continue
 			
