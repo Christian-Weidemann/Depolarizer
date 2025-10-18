@@ -29,9 +29,7 @@ func mouse_left_pressed():
 func spawn_and_connect_all(world_pos: Vector2) -> void:
 	var new_node := _spawn_node(world_pos)
 	
-	# connect to all existing nodes (including those already present)
-	# gather current nodes excluding the newly created one
-	var nodes_list := []
+	# connect to all existing nodes
 	for n in nodes.get_children():
 		if n == new_node:
 			continue
@@ -79,4 +77,5 @@ func create_edge(node_a: Node, node_b: Node) -> Line2D:
 	edge.visual_settings = visual_settings
 	edges.add_child(edge)
 	edge.set_endpoints(node_a, node_b)
+	edge.antialiased = true
 	return edge

@@ -11,22 +11,24 @@ config_version=5
 [application]
 
 config/name="Depolarizer"
-run/main_scene="res://GameController/GameController.tscn"
+run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 boot_splash/bg_color=Color(0.117647, 0.117647, 0.117647, 1)
 boot_splash/image="res://Assets/logo.png"
 boot_splash/fullsize=false
+config/icon="res://Assets/logo.svg"
 boot_splash/minimum_display_time=800
 
-[autoload]
+[debug]
 
-Global="*res://global.gd"
+settings/stdout/print_fps=true
 
 [display]
 
-window/size/viewport_width=910
-window/size/viewport_height=540
+window/size/viewport_width=1200
+window/size/viewport_height=750
 window/stretch/mode="viewport"
+window/stretch/scale=0.83
 
 [global]
 
@@ -45,24 +47,8 @@ node_color_2=Color(0.258824, 0.4, 0.760784, 1)
 
 [rendering]
 
-anti_aliasing/quality/msaa_2d=1
-anti_aliasing/quality/use_taa=true
-
-[shader_globals]
-
-node_radius={
-"type": "int",
-"value": 30
-}
-node_color={
-"type": "color",
-"value": Color(57.4, 100, 0, 1)
-}
-selected_node_color={
-"type": "color",
-"value": Color(1, 0.52549, 0.458824, 1)
-}
-edge_width={
-"type": "int",
-"value": 10
-}
+textures/default_filters/anisotropic_filtering_level=4
+anti_aliasing/screen_space_roughness_limiter/enabled=false
+anti_aliasing/screen_space_roughness_limiter/amount=0.83
+anti_aliasing/screen_space_roughness_limiter/limit=0.78
+anti_aliasing/quality/msaa_2d=3

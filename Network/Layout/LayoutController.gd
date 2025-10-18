@@ -9,15 +9,19 @@ extends Node2D
 @export var max_speed: float = 600.0
 @export var jitter_strength: float = 100.0        # initial random kick
 
-@onready var nodes = $/root/Network/Nodes
-@onready var edges = $/root/Network/Edges
+@onready var nodes := $"../Nodes"
+@onready var edges := $"../Edges"
+
 
 
 var _initialized := false
 
 func _ready() -> void:
-
+	
 	_initialized = true
+	
+	assert(nodes != null, "LayoutController: Nodes container not found.")
+	assert(edges != null, "LayoutController: Edges container not found.")
 
 func _physics_process(delta: float) -> void:
 	if not enabled:
@@ -97,8 +101,8 @@ func _repel_from(a: Vector2, b: Vector2) -> Vector2:
 
 	return dir.normalized() * strength
 
-func randf_range(minv: float, maxv: float) -> float:
-	return lerp(minv, maxv, randf())
+#func randf_range(minv: float, maxv: float) -> float:
+#	return lerp(minv, maxv, randf())
 
 
 

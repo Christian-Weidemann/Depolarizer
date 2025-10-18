@@ -32,7 +32,7 @@ func _ready() -> void:
 	#global_scale = Vector2.ONE
 	set_width(visual_settings.edge_width)
 	set_default_color(visual_settings.edge_color)
-	set_antialiased(true)
+	#set_antialiased(true)
 	_update_points()
 
 func set_endpoints(node_a: Node, node_b: Node) -> void:
@@ -47,7 +47,7 @@ func set_endpoints(node_a: Node, node_b: Node) -> void:
 		_b_ref.connect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
 	_update_points()
 
-func _on_endpoint_moved(new_pos: Vector2) -> void:
+func _on_endpoint_moved() -> void:
 	_update_points()
 
 func _on_endpoint_deleted() -> void:

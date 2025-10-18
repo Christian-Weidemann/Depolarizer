@@ -8,7 +8,7 @@
 script = ExtResource("1_4n8ri")
 
 [node name="Background" type="CanvasLayer" parent="."]
-layer = 0
+layer = -1
 script = ExtResource("2_yhdqb")
 
 [node name="Network" parent="." instance=ExtResource("3_pay53")]

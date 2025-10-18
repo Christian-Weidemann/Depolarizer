@@ -3,4 +3,9 @@
 [ext_resource type="Script" path="res://Network/Edges/Edge/edge.gd" id="1_nm5nl"]
 
 [node name="Edge" type="Line2D"]
+texture_filter = 6
+width = 0.0
+sharp_limit = 0.0
+round_precision = 1
+antialiased = true
 script = ExtResource("1_nm5nl")
