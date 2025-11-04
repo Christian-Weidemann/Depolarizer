@@ -23,7 +23,7 @@ func _ready():
 	
 	add_child(bg)
 
-func set_background_color(background_color):
-	$ColorRect.color = background_color
+func set_background_color(background_color_to_set):
+	$ColorRect.color = background_color_to_set
 
 		

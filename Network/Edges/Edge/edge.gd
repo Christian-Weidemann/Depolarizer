@@ -1,13 +1,11 @@
 extends Line2D
 class_name NetworkEdge
 
-@export var endpoint_a: NodePath
-@export var endpoint_b: NodePath
+var node_a: NetworkNode
+var node_b: NetworkNode
 
-var _a_ref: Node = null
-var _b_ref: Node = null
+@export var visual_settings: VisualSettings
 
-var visual_settings: Resource = null
 var color: Color = Color(1, 1, 1)
 
 func _ready() -> void:
@@ -15,63 +13,56 @@ func _ready() -> void:
 	# Start invisible
 	visible = false
 
-	# try resolve NodePaths if exported from editor; if created at runtime, Main will assign refs via set_endpoints
-	if endpoint_a != NodePath(""):
-		_a_ref = get_node_or_null(endpoint_a)
-	if endpoint_b != NodePath(""):
-		_b_ref = get_node_or_null(endpoint_b)
-	
-	# Connect each endpoint’s signals: moved and about_to_be_deleted.
-	if _a_ref:
-		_a_ref.connect("moved", Callable(self, "_on_endpoint_moved"))
-		_a_ref.connect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
-	if _b_ref:
-		_b_ref.connect("moved", Callable(self, "_on_endpoint_moved"))
-		_b_ref.connect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
-
 	# Set visual settings
 	set_width(visual_settings.edge_width)
 	set_default_color(visual_settings.edge_color)
-	_update_points()
 	visible = true
 
-func set_endpoints(node_a: Node, node_b: Node) -> void:
+func set_endpoints(new_node_a: NetworkNode, new_node_b: NetworkNode) -> void:
 	_disconnect_all()
-	_a_ref = node_a
-	_b_ref = node_b
-	if _a_ref:
-		_a_ref.connect("moved", Callable(self, "_on_endpoint_moved"))
-		_a_ref.connect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
-	if _b_ref:
-		_b_ref.connect("moved", Callable(self, "_on_endpoint_moved"))
-		_b_ref.connect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
-	_update_points()
+	node_a = new_node_a
+	node_b = new_node_b
+	
+	if node_a:
+		node_a.connect("moved", Callable(self, "_on_endpoint_moved"))
+		node_a.connect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
+	if node_b:
+		node_b.connect("moved", Callable(self, "_on_endpoint_moved"))
+		node_b.connect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
+	
+	call_deferred("_update_points")
 
 func _on_endpoint_moved() -> void:
 	_update_points()
 
 func _on_endpoint_deleted() -> void:
-	queue_free()  # auto remove edge if any endpoint is deleted
+	queue_free()  # auto delete edge if any endpoint is deleted
 
 func _update_points() -> void:
-	if _a_ref and _b_ref:
-		# use global positions so edge draws correctly regardless of parent transforms
-		var a_pos : Vector2 = _a_ref.position.global_position
-		var b_pos : Vector2 = _b_ref.position.global_position
+	
+	# convert world points into this Line2D's local space
+	var local_a := to_local(node_a.global_position)
+	var local_b := to_local(node_b.global_position)
+	set_points([local_a, local_b])
+	#visible = true
 		
-		# convert world points into this Line2D's local space
-		var local_a := to_local(a_pos)
-		var local_b := to_local(b_pos)
-		set_points([local_a, local_b])
-
 func _disconnect_all() -> void:
-	if _a_ref:
-		if _a_ref.is_connected("moved", Callable(self, "_on_endpoint_moved")):
-			_a_ref.disconnect("moved", Callable(self, "_on_endpoint_moved"))
-		if _a_ref.is_connected("about_to_be_deleted", Callable(self, "_on_endpoint_deleted")):
-			_a_ref.disconnect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
-	if _b_ref:
-		if _b_ref.is_connected("moved", Callable(self, "_on_endpoint_moved")):
-			_b_ref.disconnect("moved", Callable(self, "_on_endpoint_moved"))
-		if _b_ref.is_connected("about_to_be_deleted", Callable(self, "_on_endpoint_deleted")):
-			_b_ref.disconnect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
+	if node_a:
+		if node_a.is_connected("moved", Callable(self, "_on_endpoint_moved")):
+			node_a.disconnect("moved", Callable(self, "_on_endpoint_moved"))
+		if node_a.is_connected("about_to_be_deleted", Callable(self, "_on_endpoint_deleted")):
+			node_a.disconnect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
+	if node_b:
+		if node_b.is_connected("moved", Callable(self, "_on_endpoint_moved")):
+			node_b.disconnect("moved", Callable(self, "_on_endpoint_moved"))
+		if node_b.is_connected("about_to_be_deleted", Callable(self, "_on_endpoint_deleted")):
+			node_b.disconnect("about_to_be_deleted", Callable(self, "_on_endpoint_deleted"))
+
+func _physics_process(_delta):
+	
+	# Avoid updating before nodes exist
+	if node_a == null and node_b == null:
+		return
+		
+	# Edge updates its points each physics step to follow node movement.
+	_update_points()  
