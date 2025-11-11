@@ -4,16 +4,23 @@ class_name LayoutSetting
 # Toggles LayoutController's effects
 @export var enabled: bool = true
 
-# Maximum distance at which nodes repel each other.
-@export var repulsion_cutoff_distance: int = 300
-
 # Scale of attraction of network to center.
-@export var gravity: float = 100
+@export var gravity := 0.1 :
+	get:
+		return gravity
+	set(value):
+		gravity = value
+		emit_changed()
 
 # Maximum node impulse. Helps avoid explosions.
 @export var max_impulse: int = 200
 
-@export var scale: float = 0.5
+@export var scale: float = 0.5 :
+	get:
+		return scale
+	set(value):
+		scale = value
+		emit_changed()
 
 @export_group("Temporal damping settings")
 @export var min_linear_damp: int = 10

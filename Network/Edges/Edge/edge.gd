@@ -18,7 +18,6 @@ func _ready() -> void:
 	# Set visual settings
 	set_width(visual_settings.edge_width)
 	set_default_color(visual_settings.edge_color)
-	
 	#material.alpha = alpha
 	visible = true
 

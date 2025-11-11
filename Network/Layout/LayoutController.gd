@@ -23,13 +23,17 @@ var last_node_count := 0
 var last_edge_count := 0
 
 func _ready() -> void:
+
+	LayoutSettings.connect("changed", Callable(self, "_reset_damping_timer"))
+	nodes.connect("changed", Callable(self, "_reset_damping_timer"))
+	edges.connect("changed", Callable(self, "_reset_damping_timer"))
 	
 	# Set attraction center to current viewport center 
 	_update_attraction_center()
 	
 	# Updates attraction center on viewport size change signal
 	get_viewport().connect("size_changed", Callable(self, "_update_attraction_center"))
-
+	
 func _physics_process(delta: float) -> void:
 	"""
 	Runs each physics step to compute forces acting on nodes.
@@ -43,16 +47,13 @@ func _physics_process(delta: float) -> void:
 		
 	# TEMPORAL LINEAR DAMPING
 	if number_of_nodes != last_node_count or number_of_edges != last_edge_count:
-		damping_timer = 0.0
-		current_damping = LayoutSettings.min_linear_damp
-		last_node_count = number_of_nodes
-		last_edge_count = number_of_edges
+		_reset_damping_timer(number_of_nodes, number_of_edges, bodies)
 	else:
 		var damping_step: float = LayoutSettings.damping_growth_rate * (delta ** 0.5)  # Linear damp grows quadratic with time
 		damping_timer += delta
 		current_damping = clamp(current_damping + damping_step, LayoutSettings.min_linear_damp, LayoutSettings.max_linear_damp)
-	for node in bodies:
-		node.linear_damp = current_damping
+		for node in bodies:
+			node.linear_damp = current_damping
 
 	# Precompute positions of nodes
 	node_positions.resize(number_of_nodes)
@@ -77,10 +78,9 @@ func _physics_process(delta: float) -> void:
 			direction = direction.normalized()  # normalize direction for force calculations
 
 			# Repulsion forces
-			if distance < LayoutSettings.repulsion_cutoff_distance:
-				var repel_force := _repel_from(direction, distance, bodies[node_a_index].degree, bodies[node_b_index].degree)
-				node_impulses[node_a_index] -= repel_force
-				node_impulses[node_b_index] += repel_force
+			var repel_force := _repel_from(direction, distance, bodies[node_a_index].degree, bodies[node_b_index].degree)
+			node_impulses[node_a_index] -= repel_force
+			node_impulses[node_b_index] += repel_force
 			
 			# Edge attraction
 			var edge_key := network.edge_key(bodies[node_a_index], bodies[node_b_index])
@@ -132,12 +132,19 @@ func _update_attraction_center():
 	"""
 	attraction_center = Vector2.ZERO
 
+func _reset_damping_timer(number_of_nodes, number_of_edges, bodies):
+	damping_timer = 0.0
+	current_damping = LayoutSettings.min_linear_damp
+	last_node_count = number_of_nodes
+	last_edge_count = number_of_edges
+	
+	for node in bodies:
+		node.linear_damp = current_damping
+		
 func reset() -> void:
 	"""
 	Resets the state of the LayoutController.
 	Use when restarting the network.
 	"""
-	damping_timer = 0.0
-	last_node_count = 0
-	last_edge_count = 0
+	_reset_damping_timer(0, 0, [])
 	LayoutSettings.enabled = true

@@ -30,30 +30,37 @@ func _unhandled_input(event):
 			#	var new_node = _spawn_node(get_global_mouse_position())
 			#	create_edge(random_node, new_node)
 			#else:
-			var nodes_array := shuffled_nodes()
 			var new_node: NetworkNode = spawn_node(get_global_mouse_position())
 			
-			preferential_attachment_connection(new_node, nodes_array, 5)
+			preferential_attachment_connection(new_node, 2)
 			#connect_to_random(new_node, (randi() % 2) + 1)
 			#_connect_all(new_node)
 
-func preferential_attachment_connection(node: NetworkNode, nodes_array, max_edges):
+func preferential_attachment_connection(node: NetworkNode, max_edges):
 	"""
 	Connects node to nodes in nodes_array with probability proportional to their degree.
 	Minimum new edges are 1 and maximum new edges is max_edges.
 	"""
-	var new_edges := 0
+	var nodes_array := shuffled_nodes()
+	var new_edges := 0.0
 	
 	for other_node in nodes_array:
-
-		var edge_probability: float = other_node.degree / (edge_map.size() + 1)  # Adding 1 to avoid division by 0 and enable connection to disconnected nodes
+		
+		var edge_probability: float = 0
+		
+		if edges.get_child_count() < 2:
+			edge_probability = 1.0
+		else:
+			edge_probability = other_node.degree / edges.get_child_count() 
 		if edge_probability > randf():
 			create_edge(node, other_node)
 			new_edges += 1
 		if new_edges == max_edges:
 			return
-	if node.degree == 0 and nodes_array != []:
-		create_edge(node, nodes_array.pick_random())
+	# Case where no edges were created
+	if new_edges == 0 and nodes_array != []:
+		print("No edges, picking random node")
+		create_edge(node, nodes.get_children().pick_random())
 
 func connect_all(node: NetworkNode) -> void:
 	""" Connect node to all other existing nodes. """
@@ -61,7 +68,7 @@ func connect_all(node: NetworkNode) -> void:
 		if n != node:
 			create_edge(node, n)
 			
-func shuffled_nodes() -> Array[Node]:
+func shuffled_nodes() -> Array:
 	var nodes_array: Array = nodes.get_children()
 	nodes_array.shuffle()
 	return nodes_array
@@ -93,8 +100,8 @@ func create_edge(node_a: NetworkNode, node_b: NetworkNode) -> NetworkEdge:
 	"""
 	Create an edge between two node instances.
 	"""
+	# Edge dictionary handling
 	var key := edge_key(node_a, node_b)
-	
 	if edge_map.has(key):  # Duplicate check
 		return edge_map[key]
 	
@@ -106,7 +113,8 @@ func create_edge(node_a: NetworkNode, node_b: NetworkNode) -> NetworkEdge:
 	node_a.degree += 1
 	node_b.degree += 1
 	
-	edge_map[key] = edge  # Add edge to dictionary
+	# Add edge to dictionary
+	edge_map[key] = edge  
 	
 	return edge
 	

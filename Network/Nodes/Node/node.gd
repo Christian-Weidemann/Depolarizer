@@ -18,7 +18,7 @@ var _last_global_position := Vector2.INF
 
 var node_color: Color
 
-var degree := 0
+var degree: float = 0.0
 
 func _ready():
 	

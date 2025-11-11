@@ -28,7 +28,6 @@ gdscript/warnings/integer_division=0
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
 [global]
@@ -45,7 +44,7 @@ common/physics_jitter_fix=2.0
 2d/default_gravity=0.0
 2d/default_gravity_vector=Vector2(0, 0)
 2d/time_before_sleep=0.1
-2d/solver/solver_iterations=4
+2d/solver/solver_iterations=2
 
 [rendering]
 
