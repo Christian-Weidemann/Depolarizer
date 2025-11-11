@@ -13,20 +13,22 @@ signal about_to_be_deleted()
 
 var _selected := false
 
+var _input_ready := false
+
 var _last_global_position := Vector2.INF
 
 var node_color: Color
 
 func _ready():
 	
+	input_pickable = false	
+	
 	_last_global_position = global_position
 		
 	assert(visual_settings != null)
 	
-	# Apply collision shape
-	var collision_circle := CircleShape2D.new()
-	collision_circle.radius = visual_settings.node_width / 2
-	collision_shape.shape = collision_circle
+	# Apply collision radius
+	collision_shape.shape.radius = visual_settings.node_width / 2
 	
 	# Draw sprite
 	node_color = visual_settings.node_gradient.sample(randf())
@@ -34,16 +36,26 @@ func _ready():
 	sprite.draw_radius = visual_settings.node_width / 2
 	sprite.queue_redraw()
 	
-	input_pickable = true    # allow physics body to get _input_event
+	# Delay input readiness to avoid selection upon spawn
+	await get_tree().create_timer(0.1).timeout
+	input_pickable = true
+	_input_ready = true
 	
 func _input_event(_viewport, event, _shape_idx):
 	"""
 	Handles input on a node, such as mouse presses.
 	"""
-	if event is InputEventMouseButton:
+	if not _input_ready:
+		return
+	if event is InputEventMouseButton and event.is_pressed():
+		
 		# Deletion
-		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
+		if event.button_index == MOUSE_BUTTON_RIGHT:
 			queue_free()
+			
+		# Selection/Deselection
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			toggle_selection()
 
 func _deferred_set_spawn_pos(p: Vector2) -> void:
 	global_position = p
@@ -60,10 +72,11 @@ func _physics_process(_delta) -> void:
 		emit_signal("moved")
 
 func select() -> void:
+	print("node selected")
 	if _selected:
 		return
 	_selected = true
-	sprite.draw_color.ok_hsl_l(visual_settings.selection_lightness_reduction)  # Reduce lightness
+	sprite.draw_color = sprite.draw_color.darkened(visual_settings.selection_darkening)  # Reduce lightness
 	emit_signal("selected", self)
 
 func deselect() -> void:
@@ -79,12 +92,6 @@ func toggle_selection() -> void:
 	else:
 		select()
 		
-# Input via Area2D child: implement _input_event to receive clicks
-# Ensure this Node2D has an Area2D child named "ClickArea" with a CollisionShape2D
-func _on_ClickArea_input_event(viewport, event, shape_idx) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		toggle_selection()
-
 func _on_about_to_be_deleted() -> void:
 	emit_signal("about_to_be_deleted")
 

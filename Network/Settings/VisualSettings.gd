@@ -7,9 +7,9 @@ class_name VisualSettings
 
 @export var red: Color = Color(211,49,49)
 @export var blue: Color = Color(66,102,194,255)
-@export var node_gradient: Gradient = Gradient.new()
+@export var node_gradient := Gradient.new()
 
-@export var selection_lightness_reduction: float = 0.5
+@export var selection_darkening: float = 0.5
 
 @export var edge_color: Color = Color(190,190,190)
 

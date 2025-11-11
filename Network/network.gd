@@ -4,12 +4,14 @@ class_name Network
 @onready var node_scene := preload("./Nodes/Node/node.tscn")
 @onready var edge_scene := preload("./Edges/Edge/edge.tscn")
 
+@export var enabled: bool = true
+
+@export var edge_map := {}  # Dictionary storing edges by node id pair
+
 @export_group("Nodes Accessed in Script")
 @export var visual_settings: VisualSettings
 @export var nodes: Node2D
 @export var edges: Node2D
-
-@export var edge_map := {}  # Dictionary storing edges by node id pair
 
 func _ready():
 	pass
@@ -19,6 +21,8 @@ func _unhandled_input(event):
 	Handles input on network.
 	Only need to handle mouse left here, since right-clicking is handled in children.
 	"""
+	if not enabled:
+		return
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			#if nodes.get_child_count() > 0:
@@ -59,7 +63,6 @@ func _spawn_node(pos: Vector2) -> NetworkNode:
 	
 	node.call_deferred("_deferred_set_spawn_pos", pos)
 	
-	node.input_pickable = true
 	
 	return node
 

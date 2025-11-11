@@ -9,7 +9,6 @@ radius = 15.0
 
 [node name="Node" type="RigidBody2D" node_paths=PackedStringArray("collision_shape", "sprite")]
 disable_mode = 1
-input_pickable = true
 mass = 0.1
 gravity_scale = 0.0
 linear_damp = 10.0
@@ -20,7 +19,6 @@ sprite = NodePath("Sprite")
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_rbjo7")
-disabled = true
 
 [node name="Sprite" type="Node2D" parent="."]
 script = ExtResource("2_o5twy")

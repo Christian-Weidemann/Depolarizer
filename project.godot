@@ -28,7 +28,8 @@ gdscript/warnings/integer_division=0
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/vsync/vsync_mode=0
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 
 [global]
 
@@ -52,4 +53,5 @@ textures/default_filters/anisotropic_filtering_level=4
 anti_aliasing/screen_space_roughness_limiter/enabled=false
 anti_aliasing/screen_space_roughness_limiter/amount=0.83
 anti_aliasing/screen_space_roughness_limiter/limit=0.78
+environment/defaults/default_clear_color=Color(0.117647, 0.117647, 0.117647, 1)
 anti_aliasing/quality/msaa_2d=3

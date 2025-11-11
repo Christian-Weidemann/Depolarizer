@@ -23,8 +23,10 @@ var last_edge_count := 0
 
 func _ready() -> void:
 	
-	# Set attraction to current viewport center, updates with viewport size change
-	_update_attraction_center()  
+	# Set attraction center to current viewport center 
+	_update_attraction_center()
+	
+	# Updates attraction center on viewport size change signal
 	get_viewport().connect("size_changed", Callable(self, "_update_attraction_center"))
 
 func _physics_process(delta: float) -> void:
@@ -124,6 +126,10 @@ func _repel_from(direction: Vector2, distance: float) -> Vector2:
 	return direction * repulsion_strength
 
 func _update_attraction_center():
+	"""
+	Updates center of attraction to be viewport center.
+	Called in _ready and when viewport size changes (on window resize).
+	"""
 	attraction_center = get_viewport().get_visible_rect().size * 0.5
 
 func reset() -> void:

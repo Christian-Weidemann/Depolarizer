@@ -1,12 +1,12 @@
 extends Node2D
 
-@onready var layout_controller: LayoutController = get_node("Network/Layout/LayoutController")
 @onready var nodes: Node2D = get_node("Network/Nodes")
 @onready var edges: Node2D = get_node("Network/Edges")
 
-# Called when the node enters the scene tree for the first time.
+@onready var layout_controller: = get_node("Network/Layout/LayoutController")
+
 func _ready():
-	pass # Replace with function body.
+	pass
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and event.keycode == KEY_R:
