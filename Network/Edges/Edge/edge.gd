@@ -8,6 +8,8 @@ var node_b: NetworkNode
 
 var color: Color = Color(1, 1, 1)
 
+var alpha := 0.8
+
 func _ready() -> void:
 
 	# Start invisible
@@ -16,6 +18,8 @@ func _ready() -> void:
 	# Set visual settings
 	set_width(visual_settings.edge_width)
 	set_default_color(visual_settings.edge_color)
+	
+	#material.alpha = alpha
 	visible = true
 
 func set_endpoints(new_node_a: NetworkNode, new_node_b: NetworkNode) -> void:

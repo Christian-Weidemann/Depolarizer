@@ -12,12 +12,13 @@ signal about_to_be_deleted()
 @export var sprite: Node2D
 
 var _selected := false
-
 var _input_ready := false
 
 var _last_global_position := Vector2.INF
 
 var node_color: Color
+
+var degree := 0
 
 func _ready():
 	

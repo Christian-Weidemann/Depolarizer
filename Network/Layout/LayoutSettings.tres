@@ -5,11 +5,10 @@
 [resource]
 script = ExtResource("1_xuimi")
 enabled = true
-max_repulsion_strength = 2e+06
-repulsion_cutoff_distance = 300.0
-central_attraction_scaling = 0.5
-max_impulse = 100.0
-min_linear_damp = 10.0
-max_linear_damp = 100.0
-damping_growth_rate = 1.0
-edge_attraction = 0.6
+repulsion_cutoff_distance = 1000
+gravity = 0.1
+max_impulse = 1000
+scale = 200.0
+min_linear_damp = 0
+max_linear_damp = 100
+damping_growth_rate = 0.5

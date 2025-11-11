@@ -8,11 +8,11 @@ colors = PackedColorArray(0.258824, 0.4, 0.760784, 1, 0.827451, 0.192157, 0.1921
 [resource]
 script = ExtResource("1_ocihs")
 node_width = 36
-edge_width = 12
+edge_width = 8
 red = Color(0.827451, 0.192157, 0.192157, 1)
 blue = Color(0.258824, 0.4, 0.760784, 1)
 node_gradient = SubResource("Gradient_0lfuh")
-selection_darkening = null
+selection_darkening = 0.5
 edge_color = Color(0.745098, 0.745098, 0.745098, 1)
 black = Color(0.0431373, 0.0431373, 0.0431373, 1)
 white = Color(0.956863, 0.956863, 0.956863, 1)
